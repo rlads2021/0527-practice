@@ -2,17 +2,20 @@ library(httr)
 library(rvest)
 library(stringr)
 
-url <- 'https://streetvoice.com/music/charts/24hr/'
+# Download web page
+resp <- GET('https://streetvoice.com/music/charts/24hr/') 
+resp$status_code
+html <- content(resp)
 
-html <- GET(url) %>% content()
-
+# Get top 50 songs
 songs <- html %>% 
    html_nodes("ul.list-group-song") %>%
    html_nodes("li")
 
-
 # Rank
-rank <- songs %>% html_nodes("div.work-item-unmber h4") %>% html_text()
+rank <- songs %>% 
+   html_nodes("div.work-item-unmber h4") %>% 
+   html_text()
 
 # title
 title <- songs %>% 
@@ -31,8 +34,7 @@ likes <- songs %>%
    html_text() %>%
    sapply(function(x) {
       ifelse(str_detect(x, "k"), 
-             as.numeric(str_remove(x, "k"))* 1000, 
-             x)},
+             as.numeric(str_remove(x, "k"))* 1000, x)},
       USE.NAMES = FALSE)
 
 # Merge data
