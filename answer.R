@@ -34,7 +34,7 @@ likes <- songs %>%
    html_text() %>%
    sapply(function(x) {
       ifelse(str_detect(x, "k"), 
-             as.numeric(str_remove(x, "k"))* 1000, x)},
+             as.numeric(str_remove(x, "k")) * 1000, x)},
       USE.NAMES = FALSE)
 
 # Merge data
